@@ -1,10 +1,21 @@
+import { useState, useEffect } from 'react';
 import type { Task } from '../../models/Task';
-import { TaskStatus } from '../../models/Task';
+import { TaskStatus, Station } from '../../models/Task';
+import { orderService } from '../../services/orderService';
+import type { OrderStatusResponse } from '../../models/Order';
+import { OrderStatus } from '../../models/Order';
 
 interface KitchenStatusProps {
   tasks: Task[];
   isLoading: boolean;
   onRefresh: () => void;
+}
+
+interface OrderGroup {
+  orderId: number;
+  tableNumber: string;
+  tasks: Task[];
+  orderStatus?: OrderStatusResponse;
 }
 
 /**
@@ -15,44 +26,120 @@ export const KitchenStatus = ({
   isLoading,
   onRefresh,
 }: KitchenStatusProps) => {
-  const getStatusColor = (status: TaskStatus) => {
-    switch (status) {
-      case TaskStatus.COMPLETED:
-        return 'border-primary/30';
-      case TaskStatus.IN_PREPARATION:
-        return 'border-white/10';
-      case TaskStatus.PENDING:
-        return 'border-white/5 opacity-50';
+  const [orderStatuses, setOrderStatuses] = useState<Map<number, OrderStatusResponse>>(new Map());
+
+  /**
+   * Agrupa las tareas por orden
+   */
+  const groupTasksByOrder = (): OrderGroup[] => {
+    const groups = new Map<number, OrderGroup>();
+
+    tasks.forEach((task) => {
+      if (!groups.has(task.orderId)) {
+        groups.set(task.orderId, {
+          orderId: task.orderId,
+          tableNumber: task.tableNumber,
+          tasks: [],
+          orderStatus: orderStatuses.get(task.orderId),
+        });
+      }
+      groups.get(task.orderId)!.tasks.push(task);
+    });
+
+    return Array.from(groups.values()).sort((a, b) => b.orderId - a.orderId);
+  };
+
+  /**
+   * Obtiene el estado de todas las órdenes únicas
+   */
+  useEffect(() => {
+    const uniqueOrderIds = [...new Set(tasks.map((t) => t.orderId))];
+    
+    const fetchOrderStatuses = async () => {
+      const statusMap = new Map<number, OrderStatusResponse>();
+      
+      await Promise.all(
+        uniqueOrderIds.map(async (orderId) => {
+          try {
+            const status = await orderService.getOrderStatus(orderId);
+            statusMap.set(orderId, status);
+          } catch (error) {
+            console.error(`Error fetching status for order ${orderId}:`, error);
+          }
+        })
+      );
+      
+      setOrderStatuses(statusMap);
+    };
+
+    if (uniqueOrderIds.length > 0) {
+      fetchOrderStatuses();
+    }
+  }, [tasks]);
+
+  /**
+   * Calcula el progreso de una orden basado en las estaciones
+   */
+  const calculateProgress = (orderTasks: Task[]): number => {
+    const stationsCount = 3; // BAR, HOT_KITCHEN, COLD_KITCHEN
+    const stations = [Station.BAR, Station.HOT_KITCHEN, Station.COLD_KITCHEN];
+    
+    let completedStations = 0;
+    
+    stations.forEach((station) => {
+      const stationTasks = orderTasks.filter((t) => t.station === station);
+      if (stationTasks.length > 0) {
+        const allCompleted = stationTasks.every((t) => t.status === TaskStatus.COMPLETED);
+        if (allCompleted) {
+          completedStations++;
+        }
+      }
+    });
+
+    return (completedStations / stationsCount) * 100;
+  };
+
+  /**
+   * Obtiene el mensaje de estado basado en el OrderStatus
+   */
+  const getStatusLabel = (orderStatus?: OrderStatusResponse): { label: string; color: string } => {
+    if (!orderStatus) {
+      return { label: 'Cargando...', color: 'text-silver-text' };
+    }
+
+    switch (orderStatus.status) {
+      case OrderStatus.COMPLETED:
+        return { label: 'Lista', color: 'text-primary' };
+      case OrderStatus.IN_PREPARATION:
+        return { label: 'Preparando', color: 'text-primary' };
+      case OrderStatus.PENDING:
+        return { label: 'En Cola', color: 'text-silver-text' };
       default:
-        return 'border-white/5';
+        return { label: orderStatus.status, color: 'text-silver-text' };
     }
   };
 
-  const getStatusLabel = (status: TaskStatus) => {
-    switch (status) {
-      case TaskStatus.COMPLETED:
-        return 'Lista';
-      case TaskStatus.IN_PREPARATION:
-        return 'En Preparación';
-      case TaskStatus.PENDING:
-        return 'En Cola';
+  /**
+   * Obtiene el estilo del contenedor según el estado
+   */
+  const getContainerStyle = (orderStatus?: OrderStatusResponse): string => {
+    if (!orderStatus) {
+      return 'bg-white/5 border-white/10';
+    }
+
+    switch (orderStatus.status) {
+      case OrderStatus.COMPLETED:
+        return 'glass-panel-dark border-primary/30';
+      case OrderStatus.IN_PREPARATION:
+        return 'bg-white/5 border-white/10';
+      case OrderStatus.PENDING:
+        return 'bg-white/5 border-white/5 opacity-50';
       default:
-        return status;
+        return 'bg-white/5 border-white/5';
     }
   };
 
-  const getStatusIcon = (status: TaskStatus) => {
-    switch (status) {
-      case TaskStatus.COMPLETED:
-        return 'check_circle';
-      case TaskStatus.IN_PREPARATION:
-        return 'schedule';
-      case TaskStatus.PENDING:
-        return 'pending';
-      default:
-        return 'help';
-    }
-  };
+  const orderGroups = groupTasksByOrder();
 
   return (
     <div className="flex-1 p-8 flex flex-col overflow-hidden bg-midnight/30">
@@ -70,7 +157,7 @@ export const KitchenStatus = ({
       </div>
 
       <div className="flex-1 overflow-y-auto order-scroll space-y-4">
-        {tasks.length === 0 ? (
+        {orderGroups.length === 0 ? (
           <div className="text-center py-12">
             <span className="material-symbols-outlined text-6xl text-silver-text/30 mb-4 block">
               kitchen
@@ -80,49 +167,82 @@ export const KitchenStatus = ({
             </p>
           </div>
         ) : (
-          tasks.map((task) => (
-            <div
-              key={task.id}
-              className={`p-4 bg-white/5 border rounded-2xl ${getStatusColor(
-                task.status
-              )}`}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-primary font-bold text-sm">
-                    Mesa {task.tableNumber}
+          orderGroups.map((group) => {
+            const progress = calculateProgress(group.tasks);
+            const statusInfo = getStatusLabel(group.orderStatus);
+            const containerStyle = getContainerStyle(group.orderStatus);
+            const completedTasks = group.tasks.filter((t) => t.status === TaskStatus.COMPLETED).length;
+            const totalTasks = group.tasks.length;
+
+            return (
+              <div
+                key={group.orderId}
+                className={`p-4 border rounded-2xl ${containerStyle}`}
+              >
+                {/* Header */}
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-xs font-bold text-white-text">
+                    #{group.orderId} • {group.tableNumber}
                   </span>
-                  <span className="text-silver-text text-[10px]">
-                    #{task.orderId}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    {group.orderStatus?.status === OrderStatus.COMPLETED ? (
+                      <span className="material-symbols-outlined text-primary text-sm fill-1">
+                        check_circle
+                      </span>
+                    ) : group.orderStatus?.status === OrderStatus.IN_PREPARATION ? (
+                      <div className="size-2 rounded-full bg-primary animate-pulse"></div>
+                    ) : (
+                      <div className="size-2 rounded-full bg-silver-text/40"></div>
+                    )}
+                    <span className={`text-[10px] font-bold uppercase ${statusInfo.color}`}>
+                      {statusInfo.label}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <span
-                    className={`material-symbols-outlined text-sm ${
-                      task.status === TaskStatus.COMPLETED
-                        ? 'text-primary'
-                        : 'text-silver-text'
-                    }`}
-                  >
-                    {getStatusIcon(task.status)}
-                  </span>
-                  <span className="text-silver-text text-xs">
-                    {getStatusLabel(task.status)}
-                  </span>
+
+                {/* Lista de Productos */}
+                <div className="flex flex-wrap gap-1 mb-3">
+                  {group.tasks.flatMap((task) => task.products).map((product, idx) => (
+                    <span
+                      key={idx}
+                      className="text-[10px] bg-white/5 px-2 py-1 rounded text-silver-text"
+                    >
+                      {product.name}
+                    </span>
+                  ))}
                 </div>
+
+                {/* Barra de Progreso */}
+                {group.orderStatus?.status !== OrderStatus.COMPLETED && (
+                  <>
+                    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden mb-3">
+                      <div
+                        className="h-full gold-gradient rounded-full transition-all duration-500"
+                        style={{ width: `${progress}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-[10px] text-silver-text">
+                      {completedTasks} de {totalTasks} tareas completadas • {Math.round(progress)}% progreso
+                    </p>
+                  </>
+                )}
+
+                {/* Mensaje para orden completada */}
+                {group.orderStatus?.status === OrderStatus.COMPLETED && (
+                  <p className="text-[10px] text-silver-text">
+                    Recoger en estación de entrega
+                  </p>
+                )}
+
+                {/* Mensaje para orden en cola */}
+                {group.orderStatus?.status === OrderStatus.PENDING && (
+                  <p className="text-[10px] text-silver-text">
+                    Siguiente para preparación
+                  </p>
+                )}
               </div>
-              <div className="flex flex-wrap gap-1">
-                {task.products.map((product, idx) => (
-                  <span
-                    key={idx}
-                    className="text-[10px] bg-white/5 px-2 py-1 rounded text-silver-text"
-                  >
-                    {product.name}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>

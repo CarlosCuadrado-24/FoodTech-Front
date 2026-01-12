@@ -22,6 +22,14 @@
     background: linear-gradient(135deg, #C5A059 0%, #E8D3A3 100%);
   }
   
+  .amber-gradient {
+    background: linear-gradient(135deg, #FFBF00 0%, #FFA000 100%);
+  }
+  
+  .green-gradient {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  }
+  
   .gold-text-gradient {
     background: linear-gradient(135deg, #C5A059 0%, #E8D3A3 100%);
     -webkit-background-clip: text;

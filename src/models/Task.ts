@@ -25,6 +25,8 @@ export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus];
  */
 export interface TaskProduct {
   name: string;
+  type: string;
+  quantity: number;
 }
 
 /**

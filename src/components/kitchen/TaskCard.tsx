@@ -52,17 +52,25 @@ export function TaskCard({ task, onStartPreparation, isStarting = false }: TaskC
   const canStart = task.status === TaskStatus.PENDING;
 
   return (
-    <div className={`glass-panel-dark group p-4 rounded-2xl transition-all flex flex-col gap-4 ${getStatusStyles()}`}>
+    <div 
+      data-testid={`task-card-${task.id}`}
+      data-task-id={task.id}
+      data-order-id={task.orderId}
+      data-table-number={task.tableNumber}
+      data-task-status={task.status}
+      data-station={task.station}
+      className={`glass-panel-dark group p-4 rounded-2xl transition-all flex flex-col gap-4 ${getStatusStyles()}`}
+    >
       {/* Header */}
       <div className="flex justify-between items-start px-1">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-lg font-bold text-white-text">Mesa {task.tableNumber}</h3>
-            <span className={`text-xs font-bold uppercase tracking-wider ${statusBadge.color}`}>
+            <h3 data-testid="task-table-number" className="text-lg font-bold text-white-text">Mesa {task.tableNumber}</h3>
+            <span data-testid="task-status-badge" className={`text-xs font-bold uppercase tracking-wider ${statusBadge.color}`}>
               {statusBadge.label}
             </span>
           </div>
-          <p className="text-xs text-silver-text">Pedido #{task.orderId}</p>
+          <p data-testid="task-order-id" className="text-xs text-silver-text">Pedido #{task.orderId}</p>
         </div>
         <div className="text-right">
           <div className="flex items-center gap-1">
@@ -75,11 +83,17 @@ export function TaskCard({ task, onStartPreparation, isStarting = false }: TaskC
       </div>
 
       {/* Productos */}
-      <div className="bg-white/5 rounded-xl p-4 flex-1">
+      <div data-testid="task-products" className="bg-white/5 rounded-xl p-4 flex-1">
         <p className="text-[10px] uppercase tracking-widest text-silver-text mb-3">Productos</p>
         <div className="space-y-3">
           {task.products.map((product, index) => (
-            <div key={index} className="flex justify-between items-start">
+            <div 
+              key={index} 
+              data-testid={`task-product-${index}`}
+              data-product-name={product.name}
+              data-product-quantity={product.quantity}
+              className="flex justify-between items-start"
+            >
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary text-lg">
                   {getProductIcon(product.type)}
@@ -95,6 +109,7 @@ export function TaskCard({ task, onStartPreparation, isStarting = false }: TaskC
       {/* Acciones */}
       {canStart && (
         <button
+          data-testid={`start-task-btn-${task.id}`}
           onClick={() => onStartPreparation(task.id)}
           disabled={isStarting}
           className="w-full py-3.5 amber-gradient rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 text-midnight shadow-lg hover:shadow-amber-glow/20 disabled:opacity-50"

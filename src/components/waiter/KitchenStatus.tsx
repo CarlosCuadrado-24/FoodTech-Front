@@ -142,12 +142,13 @@ export const KitchenStatus = ({
   const orderGroups = groupTasksByOrder();
 
   return (
-    <div className="flex-1 p-8 flex flex-col overflow-hidden bg-midnight/30">
+    <div data-testid="kitchen-status" className="flex-1 p-8 flex flex-col overflow-hidden bg-midnight/30">
       <div className="flex items-center justify-between mb-6">
         <h4 className="text-[11px] font-bold uppercase tracking-[0.15em] text-silver-text">
           Estado de Cocina
         </h4>
         <button
+          data-testid="refresh-kitchen-btn"
           onClick={onRefresh}
           disabled={isLoading}
           className="text-primary text-sm cursor-pointer hover:rotate-180 transition-transform duration-500 disabled:opacity-50"
@@ -156,9 +157,9 @@ export const KitchenStatus = ({
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto order-scroll space-y-4">
+      <div data-testid="kitchen-orders-list" className="flex-1 overflow-y-auto order-scroll space-y-4">
         {orderGroups.length === 0 ? (
-          <div className="text-center py-12">
+          <div data-testid="kitchen-empty-state" className="text-center py-12">
             <span className="material-symbols-outlined text-6xl text-silver-text/30 mb-4 block">
               kitchen
             </span>
@@ -177,11 +178,15 @@ export const KitchenStatus = ({
             return (
               <div
                 key={group.orderId}
+                data-testid={`kitchen-order-${group.orderId}`}
+                data-order-id={group.orderId}
+                data-table-number={group.tableNumber}
+                data-order-status={group.orderStatus?.status}
                 className={`p-4 border rounded-2xl ${containerStyle}`}
               >
                 {/* Header */}
                 <div className="flex justify-between items-center mb-3">
-                  <span className="text-xs font-bold text-white-text">
+                  <span data-testid="kitchen-order-header" className="text-xs font-bold text-white-text">
                     #{group.orderId} • {group.tableNumber}
                   </span>
                   <div className="flex items-center gap-2">
@@ -194,17 +199,19 @@ export const KitchenStatus = ({
                     ) : (
                       <div className="size-2 rounded-full bg-silver-text/40"></div>
                     )}
-                    <span className={`text-[10px] font-bold uppercase ${statusInfo.color}`}>
+                    <span data-testid="kitchen-order-status" className={`text-[10px] font-bold uppercase ${statusInfo.color}`}>
                       {statusInfo.label}
                     </span>
                   </div>
                 </div>
 
                 {/* Lista de Productos */}
-                <div className="flex flex-wrap gap-1 mb-3">
+                <div data-testid="kitchen-order-products" className="flex flex-wrap gap-1 mb-3">
                   {group.tasks.flatMap((task) => task.products).map((product, idx) => (
                     <span
                       key={idx}
+                      data-testid={`kitchen-product-${idx}`}
+                      data-product-name={product.name}
                       className="text-[10px] bg-white/5 px-2 py-1 rounded text-silver-text"
                     >
                       {product.name}
@@ -215,13 +222,15 @@ export const KitchenStatus = ({
                 {/* Barra de Progreso */}
                 {group.orderStatus?.status !== OrderStatus.COMPLETED && (
                   <>
-                    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden mb-3">
+                    <div data-testid="kitchen-progress-bar" className="w-full h-1 bg-white/10 rounded-full overflow-hidden mb-3">
                       <div
+                        data-testid="kitchen-progress-fill"
+                        data-progress={Math.round(progress)}
                         className="h-full gold-gradient rounded-full transition-all duration-500"
                         style={{ width: `${progress}%` }}
                       ></div>
                     </div>
-                    <p className="text-[10px] text-silver-text">
+                    <p data-testid="kitchen-progress-text" className="text-[10px] text-silver-text">
                       {completedTasks} de {totalTasks} tareas completadas • {Math.round(progress)}% progreso
                     </p>
                   </>
@@ -229,14 +238,14 @@ export const KitchenStatus = ({
 
                 {/* Mensaje para orden completada */}
                 {group.orderStatus?.status === OrderStatus.COMPLETED && (
-                  <p className="text-[10px] text-silver-text">
+                  <p data-testid="kitchen-order-completed-msg" className="text-[10px] text-silver-text">
                     Recoger en estación de entrega
                   </p>
                 )}
 
                 {/* Mensaje para orden en cola */}
                 {group.orderStatus?.status === OrderStatus.PENDING && (
-                  <p className="text-[10px] text-silver-text">
+                  <p data-testid="kitchen-order-pending-msg" className="text-[10px] text-silver-text">
                     Siguiente para preparación
                   </p>
                 )}

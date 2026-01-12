@@ -12,6 +12,10 @@ interface ProductCardProps {
 export const ProductCard = ({ product, isInOrder, onAdd }: ProductCardProps) => {
   return (
     <div
+      data-testid={`product-card-${product.name.replace(/\s+/g, '-').toLowerCase()}`}
+      data-product-name={product.name}
+      data-product-type={product.type}
+      data-is-in-order={isInOrder}
       onClick={() => onAdd(product)}
       className={`
         group p-4 rounded-2xl cursor-pointer transition-all flex flex-col gap-4
@@ -30,7 +34,7 @@ export const ProductCard = ({ product, isInOrder, onAdd }: ProductCardProps) => 
           </span>
         </div>
         {isInOrder && (
-          <span className="bg-primary/20 text-primary text-xs px-2 py-1 rounded-full font-bold">
+          <span data-testid="product-added-badge" className="bg-primary/20 text-primary text-xs px-2 py-1 rounded-full font-bold">
             Agregado
           </span>
         )}
@@ -38,14 +42,17 @@ export const ProductCard = ({ product, isInOrder, onAdd }: ProductCardProps) => 
 
       {/* Info */}
       <div>
-        <h3 className="text-white-text font-bold mb-1">{product.name}</h3>
+        <h3 data-testid="product-name" className="text-white-text font-bold mb-1">{product.name}</h3>
         {product.description && (
           <p className="text-silver-text text-xs">{product.description}</p>
         )}
       </div>
 
       {/* Add Button */}
-      <button className="w-full py-2 bg-white/5 hover:bg-primary/20 rounded-lg text-silver-text group-hover:text-primary text-sm font-bold transition-colors flex items-center justify-center gap-2">
+      <button 
+        data-testid={`add-product-btn-${product.name.replace(/\s+/g, '-').toLowerCase()}`}
+        className="w-full py-2 bg-white/5 hover:bg-primary/20 rounded-lg text-silver-text group-hover:text-primary text-sm font-bold transition-colors flex items-center justify-center gap-2"
+      >
         <span className="material-symbols-outlined text-lg">add</span>
         Agregar
       </button>

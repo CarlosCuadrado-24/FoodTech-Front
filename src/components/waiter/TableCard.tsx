@@ -15,6 +15,10 @@ export const TableCard = ({ table, isSelected, onSelect }: TableCardProps) => {
 
   return (
     <div
+      data-testid={`table-card-${table.number}`}
+      data-table-id={table.id}
+      data-table-number={table.number}
+      data-table-status={table.status}
       onClick={() => !isOccupied && onSelect(table.id)}
       className={`
         p-3 rounded-xl flex flex-col items-center justify-center gap-1 
@@ -29,6 +33,7 @@ export const TableCard = ({ table, isSelected, onSelect }: TableCardProps) => {
       `}
     >
       <span
+        data-testid={`table-number-${table.number}`}
         className={`text-[10px] font-bold ${
           isOccupied
             ? 'text-red-400'
@@ -40,6 +45,7 @@ export const TableCard = ({ table, isSelected, onSelect }: TableCardProps) => {
         {table.number}
       </span>
       <span
+        data-testid={`table-status-${table.number}`}
         className={`text-sm font-bold ${
           isOccupied
             ? 'text-red-300'

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTables } from '../hooks/useTables';
 import { useOrder } from '../hooks/useOrder';
 import { useKitchenTasks } from '../hooks/useKitchenTasks';
@@ -22,6 +22,7 @@ export const WaiterView = () => {
     selectedTableId,
     selectTable,
     markTableAsOccupied,
+    syncTablesWithTasks,
   } = useTables();
 
   // Estado del pedido
@@ -42,6 +43,13 @@ export const WaiterView = () => {
   const [selectedCategory, setSelectedCategory] = useState<
     ProductType | 'ALL'
   >('ALL');
+
+  /**
+   * Sincroniza el estado de las mesas con las tareas cada vez que cambian
+   */
+  useEffect(() => {
+    syncTablesWithTasks(tasks);
+  }, [tasks, syncTablesWithTasks]);
 
   /**
    * Maneja el envío del pedido

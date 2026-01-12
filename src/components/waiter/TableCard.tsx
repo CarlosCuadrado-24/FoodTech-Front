@@ -15,37 +15,47 @@ export const TableCard = ({ table, isSelected, onSelect }: TableCardProps) => {
 
   return (
     <div
-      onClick={() => onSelect(table.id)}
+      onClick={() => !isOccupied && onSelect(table.id)}
       className={`
         p-3 rounded-xl flex flex-col items-center justify-center gap-1 
-        cursor-pointer transition-all
+        transition-all
         ${
-          isSelected
-            ? 'glass-panel-dark border-primary/40'
-            : 'bg-white/5 border border-white/5 hover:border-primary/30'
+          isOccupied
+            ? 'bg-gradient-to-br from-red-900/40 to-red-800/30 border border-red-700/50 cursor-not-allowed opacity-75'
+            : isSelected
+            ? 'glass-panel-dark border-primary/40 cursor-pointer'
+            : 'bg-white/5 border border-white/5 hover:border-primary/30 cursor-pointer'
         }
       `}
     >
       <span
         className={`text-[10px] font-bold ${
-          isSelected ? 'text-primary' : 'text-silver-text'
+          isOccupied
+            ? 'text-red-400'
+            : isSelected
+            ? 'text-primary'
+            : 'text-silver-text'
         }`}
       >
         {table.number}
       </span>
       <span
         className={`text-sm font-bold ${
-          isSelected ? 'text-white-text' : 'text-silver-text'
+          isOccupied
+            ? 'text-red-300'
+            : isSelected
+            ? 'text-white-text'
+            : 'text-silver-text'
         }`}
       >
         {isOccupied ? 'Ocupada' : 'Disponible'}
       </span>
       <div
         className={`w-1 h-1 rounded-full ${
-          isSelected
+          isOccupied
+            ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'
+            : isSelected
             ? 'bg-primary shadow-[0_0_8px_#C5A059]'
-            : isOccupied
-            ? 'bg-primary/60'
             : 'bg-white/20'
         }`}
       />

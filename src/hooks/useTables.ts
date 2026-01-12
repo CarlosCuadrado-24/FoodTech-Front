@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
 import type { Table } from '../models/Table';
 import { TableStatus } from '../models/Table';
+import type { Task } from '../models/Task';
+import { TaskStatus } from '../models/Task';
 
 /**
  * Datos de mesas iniciales (simuladas)
@@ -61,6 +63,45 @@ export const useTables = () => {
     );
   }, []);
 
+  /**
+   * Sincroniza el estado de las mesas con las tareas del backend
+   * Marca una mesa como OCUPADA si tiene tareas no completadas
+   */
+  const syncTablesWithTasks = useCallback((tasks: Task[]) => {
+    setTables((prevTables) => {
+      // Crear un mapa de mesas ocupadas basado en tareas no completadas
+      const occupiedTables = new Map<string, number>();
+
+      tasks.forEach((task) => {
+        if (task.status !== TaskStatus.COMPLETED) {
+          // Si la tarea no está completada, la mesa está ocupada
+          occupiedTables.set(task.tableNumber, task.orderId);
+        }
+      });
+
+      // Actualizar el estado de las mesas
+      return prevTables.map((table) => {
+        const orderId = occupiedTables.get(table.number);
+        
+        if (orderId) {
+          // Mesa ocupada
+          return {
+            ...table,
+            status: TableStatus.OCUPADA,
+            activeOrderId: orderId,
+          };
+        } else {
+          // Mesa disponible
+          return {
+            ...table,
+            status: TableStatus.DISPONIBLE,
+            activeOrderId: undefined,
+          };
+        }
+      });
+    });
+  }, []);
+
   return {
     tables,
     selectedTable,
@@ -68,5 +109,6 @@ export const useTables = () => {
     selectTable,
     markTableAsOccupied,
     markTableAsAvailable,
+    syncTablesWithTasks,
   };
 };

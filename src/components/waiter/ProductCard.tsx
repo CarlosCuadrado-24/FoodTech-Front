@@ -26,35 +26,43 @@ export const ProductCard = ({ product, isInOrder, onAdd }: ProductCardProps) => 
         }
       `}
     >
-      {/* Icon */}
-      <div className="flex items-center justify-between">
-        <div className="size-12 bg-primary/10 rounded-xl flex items-center justify-center">
-          <span className="material-symbols-outlined text-primary text-2xl">
-            restaurant_menu
-          </span>
-        </div>
+      {/* Image */}
+      <div className="h-48 rounded-xl overflow-hidden relative">
+        <img 
+          alt={product.name} 
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+          src={product.image}
+        />
         {isInOrder && (
-          <span data-testid="product-added-badge" className="bg-primary/20 text-primary text-xs px-2 py-1 rounded-full font-bold">
-            Agregado
-          </span>
+          <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
+            <span className="material-symbols-outlined text-primary text-4xl">check_circle</span>
+          </div>
         )}
       </div>
 
       {/* Info */}
-      <div>
-        <h3 data-testid="product-name" className="text-white-text font-bold mb-1">{product.name}</h3>
-        {product.description && (
-          <p className="text-silver-text text-xs">{product.description}</p>
-        )}
+      <div className="flex justify-between items-start px-1">
+        <div>
+          <h3 data-testid="product-name" className={`font-bold text-lg transition-colors ${isInOrder ? 'text-primary' : 'text-white-text group-hover:text-primary'}`}>
+            {product.name}
+          </h3>
+          {product.description && (
+            <p className="text-silver-text text-xs mt-1">{product.description}</p>
+          )}
+        </div>
       </div>
 
       {/* Add Button */}
       <button 
         data-testid={`add-product-btn-${product.name.replace(/\s+/g, '-').toLowerCase()}`}
-        className="w-full py-2 bg-white/5 hover:bg-primary/20 rounded-lg text-silver-text group-hover:text-primary text-sm font-bold transition-colors flex items-center justify-center gap-2"
+        className={`w-full py-3.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+          isInOrder 
+            ? 'gold-gradient text-midnight shadow-lg shadow-primary/10'
+            : 'bg-white/5 group-hover:gold-gradient text-silver-text group-hover:text-midnight border border-white/5 group-hover:border-transparent'
+        }`}
       >
-        <span className="material-symbols-outlined text-lg">add</span>
-        Agregar
+        <span className="material-symbols-outlined text-sm">{isInOrder ? 'check' : 'add'}</span>
+        {isInOrder ? 'Agregado' : 'Agregar a Orden'}
       </button>
     </div>
   );

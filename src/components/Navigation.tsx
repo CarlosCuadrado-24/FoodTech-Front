@@ -28,7 +28,7 @@ export function Navigation() {
             <NavLink
               key={link.path}
               to={link.path}
-              className={({ isActive }) =>
+              className={({ isActive }: { isActive: boolean }) =>
                 `px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-2 ${
                   isActive
                     ? 'gold-gradient text-midnight shadow-lg shadow-primary/20'

@@ -17,6 +17,7 @@ export interface Product {
   name: string;
   type: ProductType;
   description?: string;
+  image?: string;
 }
 
 /**

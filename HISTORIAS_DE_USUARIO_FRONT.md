@@ -1,44 +1,10 @@
-# 📋 Historias de Usuario - FoodTech Frontend (Interfaz de Mesero)
-
-## 🎯 Principios INVEST
-
-Todas las historias de usuario de este proyecto cumplen con los principios INVEST:
-
-- **I**ndependent (Independiente): Cada historia puede desarrollarse y entregarse por separado
-- **N**egotiable (Negociable): Los detalles pueden refinarse con el equipo
-- **V**aluable (Valiosa): Aporta valor observable al negocio
-- **E**stimable (Estimable): Se puede estimar el esfuerzo necesario
-- **S**mall (Pequeña): Se puede completar en una iteración
-- **T**estable (Testeable): Se puede verificar su cumplimiento
-
----
+# 📋 Historias de Usuario - FoodTech Frontend
 
 ## HU-FRONT-001: Visualizar disponibilidad de mesas en tiempo real
-
-### Descripción
 
 **Como** mesero del restaurante  
 **Quiero** ver el estado actual de todas las mesas (disponibles u ocupadas)  
 **Para** saber qué mesas puedo asignar a nuevos clientes sin consultar manualmente con cocina
-
-### Contexto de Negocio
-
-Actualmente, los meseros deben preguntar al personal de cocina o revisar anotaciones manuales para saber qué mesas están ocupadas. Esto genera:
-- Pérdida de tiempo en consultas innecesarias
-- Riesgo de asignar mesas que ya tienen pedidos en preparación
-- Confusión cuando múltiples meseros atienden el mismo comedor
-- Experiencia negativa cuando se intenta tomar un pedido de una mesa que aún tiene orden activa
-
-La solución muestra automáticamente el estado real de cada mesa basándose en las órdenes en cocina.
-
-### Valor de Negocio
-
-- Reducción del tiempo de consultas entre meseros y cocina
-- Eliminación de errores de asignación de mesas
-- Mejor coordinación del equipo de servicio
-- Mayor rotación de mesas por asignación eficiente
-
----
 
 ### Criterios de Aceptación
 
@@ -100,30 +66,9 @@ Scenario: Sistema impide tomar pedidos en mesas ocupadas
 
 ## HU-FRONT-002: Construir pedido por categorías de productos
 
-### Descripción
-
 **Como** mesero del restaurante  
 **Quiero** explorar el menú organizado por categorías de productos  
 **Para** encontrar rápidamente lo que el cliente solicita sin revisar todo el menú
-
-### Contexto de Negocio
-
-Cuando un cliente ordena, el mesero debe buscar entre todos los productos del menú. Con menús extensos, esto genera:
-- Tiempo excesivo en la toma de pedidos
-- Riesgo de no encontrar productos solicitados
-- Frustración del mesero al navegar información desordenada
-- Experiencia de servicio lenta que afecta la satisfacción del cliente
-
-La solución organiza el menú por categorías para acceso rápido a cada tipo de producto.
-
-### Valor de Negocio
-
-- Reducción del tiempo de toma de pedidos
-- Mejora en la experiencia del cliente por servicio más ágil
-- Menor margen de error al encontrar productos específicos
-- Incremento en la productividad del personal de servicio
-
----
 
 ### Criterios de Aceptación
 
@@ -172,30 +117,9 @@ Scenario: Mesero regresa a ver todos los productos sin filtro
 
 ## HU-FRONT-003: Construir pedido con múltiples productos
 
-### Descripción
-
 **Como** mesero del restaurante  
 **Quiero** agregar múltiples productos al pedido antes de enviarlo  
 **Para** tomar todo lo que el cliente solicita en una sola interacción con el sistema
-
-### Contexto de Negocio
-
-Los clientes suelen ordenar varios productos (bebidas, entradas, platos fuertes, postres) en la misma visita. Si el sistema solo permite enviar productos uno por uno:
-- El mesero debe hacer múltiples envíos a cocina
-- Se generan múltiples órdenes para la misma mesa
-- Cocina recibe información fragmentada
-- El cliente experimenta entregas desordenadas
-
-La solución permite construir un pedido completo antes de enviarlo a cocina.
-
-### Valor de Negocio
-
-- Una sola orden por mesa genera claridad operativa
-- Cocina recibe información completa de lo que el cliente ordenó
-- Reducción de errores por órdenes fragmentadas
-- Mejor experiencia del cliente por servicio organizado
-
----
 
 ### Criterios de Aceptación
 
@@ -257,30 +181,9 @@ Scenario: Mesero verifica cuántos items lleva el pedido
 
 ## HU-FRONT-004: Modificar pedido antes de enviarlo
 
-### Descripción
-
 **Como** mesero del restaurante  
 **Quiero** corregir o eliminar productos del pedido antes de enviarlo  
 **Para** ajustar el pedido si el cliente cambia de opinión o si cometí un error al agregar
-
-### Contexto de Negocio
-
-Es común que los clientes cambien de opinión antes de confirmar el pedido, o que el mesero agregue productos por error. Si no se puede modificar el pedido:
-- Se envían productos no solicitados a cocina
-- Se genera desperdicio de preparación
-- El cliente recibe lo que no pidió
-- Se debe cancelar toda la orden para corregir un solo producto
-
-La solución permite modificar el pedido antes de enviarlo.
-
-### Valor de Negocio
-
-- Reducción de desperdicios por productos no solicitados
-- Mayor satisfacción del cliente al recibir exactamente lo ordenado
-- Ahorro operativo al no preparar productos cancelados
-- Flexibilidad en la toma de pedidos
-
----
 
 ### Criterios de Aceptación
 
@@ -330,30 +233,9 @@ Scenario: Mesero elimina todos los productos agregados
 
 ## HU-FRONT-005: Enviar pedido completo a cocina
 
-### Descripción
-
 **Como** mesero del restaurante  
 **Quiero** enviar el pedido completo a cocina cuando el cliente confirma su orden  
 **Para** que todas las estaciones reciban sus tareas y comiencen la preparación
-
-### Contexto de Negocio
-
-Una vez que el cliente confirma su orden, el mesero debe transmitir esa información a cocina. Si este proceso no es claro:
-- El mesero no sabe si la orden fue recibida
-- Pueden perderse pedidos
-- No hay confirmación de que cocina inició la preparación
-- El mesero debe verificar manualmente con cocina
-
-La solución permite enviar el pedido con confirmación clara de recepción.
-
-### Valor de Negocio
-
-- Comunicación confiable entre servicio y cocina
-- Eliminación de pedidos perdidos
-- Inicio inmediato de preparación
-- Trazabilidad de cada orden
-
----
 
 ### Criterios de Aceptación
 
@@ -436,29 +318,9 @@ Sin esta visibilidad, los meseros interrumpen a cocina, dan información impreci
 - Menos interrupciones al personal de cocina
 - Mayor eficiencia en la entrega y servicio al cliente
 - Mejora en la experiencia al reducir incertidumbre
-
----
-
-### Criterios de Aceptación
-
-#### Escenario 1: Listado unificado de órdenes activas
-
-```gherkin
-Scenario: Mesero ve todas las órdenes activas en un único listado
-  Given que el mesero ha enviado varias órdenes a cocina
-  When el mesero consulta la sección de órdenes en cocina
-  Then el mesero ve una lista con todas las órdenes activas
-  And cada entrada muestra el número de orden y la mesa asociada
-```
-
-#### Escenario 2: Identificación clara de estado por orden
-
-```gherkin
-Scenario: Mesero identifica rápidamente el estado de una orden
-  Given que existe una orden para la mesa "A3"
-  When la orden está en diferentes fases de progreso
-  Then el mesero puede ver si la orden está "En Cola", "Preparando" o "Lista"
-  And el mesero entiende qué significa cada estado para la entrega
+**Como** mesero del restaurante  
+**Quiero** ver en un solo lugar el estado y el progreso de las órdenes que envié a cocina  
+**Para** informar al cliente con precisión sobre cuándo estará su pedido y actuar oportunamentend el mesero entiende qué significa cada estado para la entrega
 ```
 
 #### Escenario 3: Visualización de productos por orden
@@ -513,38 +375,13 @@ Sin esta visibilidad clara:
 - El personal no sabe qué preparar primero
 - Se pierde el contexto de la mesa asociada
 - No hay claridad sobre qué tareas están esperando atención
-- El servicio al cliente se retrasa por falta de organización
-
-La solución muestra de forma clara las tareas de cada estación.
-
-### Valor de Negocio
-
-- Claridad operativa para el personal de cocina
-- Priorización efectiva de tareas pendientes
-- Reducción de errores por confusión de tareas
-- Mejora en tiempos de preparación
-
 ---
 
-### Criterios de Aceptación
+## HU-FRONT-007: Visualizar tareas asignadas a estación de trabajo
 
-#### Escenario 1: Visualización de tareas de la estación
-
-```gherkin
-Scenario: Personal de barra ve sus tareas asignadas
-  Given que el personal accede a la vista de estación de barra
-  When el sistema carga las tareas
-  Then el personal ve únicamente las tareas asignadas a la estación de barra
-  And no se muestran tareas de otras estaciones
-```
-
-#### Escenario 2: Información completa por tarea
-
-```gherkin
-Scenario: Personal identifica los detalles de una tarea
-  Given que hay una tarea asignada a la estación
-  When el personal revisa esa tarea
-  Then el personal ve qué productos debe preparar
+**Como** personal de cocina (barra, cocina caliente o cocina fría)  
+**Quiero** ver las tareas que están asignadas a mi estación de trabajo  
+**Para** saber qué productos debo preparar, para qué mesa y en qué ordenhen el personal ve qué productos debe preparar
   And el personal ve para qué mesa es la preparación
   And el personal ve el número de orden asociada
 ```
@@ -608,35 +445,9 @@ La solución permite filtrar tareas según su estado para mejor organización.
 
 - Mayor enfoque en tareas prioritarias
 - Reducción de distracciones visuales
-- Agilidad en identificación de trabajo pendiente
-- Mejor gestión del flujo de trabajo
-
----
-
-### Criterios de Aceptación
-
-#### Escenario 1: Filtro para ver todas las tareas
-
-```gherkin
-Scenario: Personal revisa todas las tareas sin filtro
-  Given que la estación tiene tareas en diferentes estados
-  When el personal selecciona el filtro "Todas"
-  Then el personal ve las tareas pendientes, en preparación y completadas
-  And puede tener una vista completa del trabajo del turno
-```
-
-#### Escenario 2: Filtro para ver solo tareas pendientes
-
-```gherkin
-Scenario: Personal quiere ver solo lo que falta por iniciar
-  Given que hay tareas en diferentes estados en la estación
-  When el personal selecciona el filtro "Pendiente"
-  Then el personal ve únicamente las tareas que aún no se han iniciado
-  And no se muestran tareas en preparación ni completadas
-```
-
-#### Escenario 3: Filtro para ver tareas en preparación
-
+**Como** personal de cocina en mi estación de trabajo  
+**Quiero** filtrar las tareas por su estado (todas, pendientes, en preparación, completadas)  
+**Para** enfocarme en las tareas que requieren mi atención inmediata
 ```gherkin
 Scenario: Personal revisa qué está actualmente en proceso
   Given que hay tareas siendo trabajadas por el equipo
@@ -679,35 +490,9 @@ Scenario: Filtro seleccionado no tiene tareas
 
 ## HU-FRONT-009: Actualización automática de estados
 
-### Descripción
-
 **Como** mesero del restaurante  
 **Quiero** que los estados de mesas y órdenes se actualicen automáticamente  
 **Para** ver información siempre actualizada sin tener que recargar manualmente
-
-### Contexto de Negocio
-
-En un restaurante, los estados cambian constantemente:
-- Cocina completa tareas continuamente
-- Mesas se ocupan y liberan
-- Órdenes avanzan en su preparación
-
-Si el mesero ve información desactualizada:
-- Puede intentar asignar mesas ya ocupadas
-- No se entera cuando las órdenes están listas
-- Debe recargar manualmente constantemente
-- Pierde tiempo en verificación manual
-
-La solución actualiza automáticamente los estados en tiempo real.
-
-### Valor de Negocio
-
-- Información siempre actualizada sin esfuerzo del mesero
-- Respuesta inmediata a cambios en cocina
-- Reducción de errores por información desactualizada
-- Mayor agilidad en el servicio
-
----
 
 ### Criterios de Aceptación
 
@@ -733,6 +518,7 @@ Scenario: Mesero ve cambios conforme cocina trabaja
 
 #### Escenario 3: Actualización de disponibilidad de mesas
 
+```
 ```gherkin
 Scenario: Mesa se muestra ocupada cuando se envía orden
   Given que el mesero está viendo las mesas disponibles
@@ -750,77 +536,3 @@ Scenario: Mesero puede forzar actualización inmediata
   Then el sistema consulta inmediatamente el estado actual
   And muestra la información más reciente
 ```
-
----
-
-## 📊 Matriz de Trazabilidad Frontend
-
-| Historia | Actor | Prioridad | Complejidad | Depende de Backend |
-|----------|-------|-----------|-------------|-------------------|
-| HU-FRONT-001 | Mesero | Alta | Media | HU-001, HU-002 |
-| HU-FRONT-002 | Mesero | Media | Baja | - |
-| HU-FRONT-003 | Mesero | Alta | Media | - |
-| HU-FRONT-004 | Mesero | Media | Baja | - |
-| HU-FRONT-005 | Mesero | Alta | Media | HU-001 |
-| HU-FRONT-006 | Mesero | Alta | Media | HU-002, HU-003 |
-| HU-FRONT-007 | Cocina | Alta | Media | HU-002 |
-| HU-FRONT-008 | Cocina | Media | Baja | HU-002 |
-| HU-FRONT-009 | Mesero/Cocina | Media | Media | HU-002, HU-003 |
-
----
-
-## 🎯 Orden de Implementación Sugerido
-
-1. **Sprint 1:** HU-FRONT-002, HU-FRONT-003, HU-FRONT-004 (Gestión básica de pedidos)
-2. **Sprint 2:** HU-FRONT-005, HU-FRONT-001 (Envío y gestión de mesas)
-3. **Sprint 3:** HU-FRONT-006, HU-FRONT-007 (Monitoreo de órdenes y vista de estaciones)
-4. **Sprint 4:** HU-FRONT-008, HU-FRONT-009 (Filtros y actualización automática)
-
----
-
-## 📝 Notas Importantes
-
-### Lenguaje de Negocio
-
-Todos los criterios de aceptación están escritos en **lenguaje de negocio**, evitando términos técnicos:
-- ✅ "el mesero selecciona un producto" (no "el mesero hace click en la tarjeta")
-- ✅ "el sistema indica visualmente" (no "se muestra un badge en el div")
-- ✅ "el pedido se vacía" (no "se ejecuta el hook reset")
-- ✅ "el mesero ve un indicador" (no "se renderiza la barra de progreso")
-
-### Validez Tecnológica
-
-Los criterios son **independientes de la implementación**:
-- ✅ Válidos si usas React, Vue o Angular
-- ✅ Válidos si cambias de Tailwind a otro framework CSS
-- ✅ Válidos si modificas los componentes internos
-- ✅ Válidos si cambias la estructura de estado
-
-### Orientación a QA
-
-Los escenarios están escritos para que **QA pueda entenderlos y probarlos** sin conocimiento del código frontend.
-
-### Complementariedad con Backend
-
-Estas historias **complementan las del backend**:
-- Backend: "el sistema genera tareas por estación"
-- Frontend: "el mesero ve el progreso basado en las estaciones"
-
-- Backend: "el sistema cambia el estado a EN_PREPARACION"
-- Frontend: "el mesero ve que la orden está en estado Preparando"
-
----
-
-## 🔗 Relación con Historias de Usuario del Backend
-
-| Historia Backend | Historias Frontend Relacionadas | Relación |
-|-----------------|--------------------------------|----------|
-| HU-001 (Procesar pedido) | HU-FRONT-003, HU-FRONT-004, HU-FRONT-005 | El frontend construye y envía el pedido que el backend procesa |
-| HU-002 (Consultar tareas) | HU-FRONT-001, HU-FRONT-006, HU-FRONT-007, HU-FRONT-008 | El frontend muestra tareas consultadas por estación y permite filtrado |
-| HU-003 (Ejecutar tarea) | HU-FRONT-006, HU-FRONT-007, HU-FRONT-009 | El frontend refleja el progreso y permite iniciar tareas |
-
----
-
-**Versión:** 1.0  
-**Fecha:** Enero 2026  
-**Autor:** FoodTech Frontend Team

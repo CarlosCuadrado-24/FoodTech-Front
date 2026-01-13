@@ -16,7 +16,7 @@ export function TaskList({
 }: TaskListProps) {
   if (tasks.length === 0) {
     return (
-      <div className="border-2 border-dashed border-white/5 rounded-2xl flex flex-col items-center justify-center text-silver-text/30 p-8 min-h-[400px]">
+      <div data-testid="empty-tasks-message" className="border-2 border-dashed border-white/5 rounded-2xl flex flex-col items-center justify-center text-silver-text/30 p-8 min-h-[400px]">
         <span className="material-symbols-outlined text-5xl mb-3">hourglass_empty</span>
         <p className="text-xs font-bold uppercase tracking-[0.2em]">{emptyMessage}</p>
       </div>

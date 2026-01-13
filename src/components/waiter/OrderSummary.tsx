@@ -36,18 +36,30 @@ export const OrderSummary = ({
         <>
           <div data-testid="order-products-list" className="space-y-4 sm:space-y-6 max-h-[200px] sm:max-h-[250px] lg:max-h-[300px] overflow-y-auto order-scroll pr-2 sm:pr-4">
             {products.map((product) => (
-              <div key={product.name} className="flex justify-between items-start group">
+              <div 
+                key={product.name}
+                data-testid={`order-item-${product.name.toLowerCase().replace(/\s+/g, '-')}`}
+                data-product-name={product.name}
+                className="flex justify-between items-start group"
+              >
                 <div className="flex-1">
                   <div className="flex items-center gap-1 sm:gap-2">
-                    <span className="text-white-text text-sm sm:text-base font-bold">
+                    <span 
+                      data-testid="order-item-name"
+                      className="text-white-text text-sm sm:text-base font-bold"
+                    >
                       {product.name}
                     </span>
-                    <span className="text-primary text-xs sm:text-sm font-bold">
+                    <span 
+                      data-testid="order-item-quantity"
+                      className="text-primary text-xs sm:text-sm font-bold"
+                    >
                       x{product.quantity}
                     </span>
                   </div>
                 </div>
                 <button
+                  data-testid={`remove-product-btn-${product.name.toLowerCase().replace(/\s+/g, '-')}`}
                   onClick={() => onRemoveProduct(product.name)}
                   className="opacity-0 group-hover:opacity-100 transition-opacity text-silver-text hover:text-primary"
                 >

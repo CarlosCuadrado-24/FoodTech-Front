@@ -1,35 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { WaiterView } from './views/WaiterView';
+import { HotKitchenView } from './views/HotKitchenView';
+import { BarView } from './views/BarView';
+import { ColdKitchenView } from './views/ColdKitchenView';
+import { Navigation } from './components/Navigation';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank" rel="noopener noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <BrowserRouter>
+      <Navigation />
+      <div className="pt-16">
+        <Routes>
+          <Route path="/" element={<Navigate to="/mesero" replace />} />
+          <Route path="/mesero" element={<WaiterView />} />
+          <Route path="/cocina-caliente" element={<HotKitchenView />} />
+          <Route path="/barra" element={<BarView />} />
+          <Route path="/cocina-fria" element={<ColdKitchenView />} />
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

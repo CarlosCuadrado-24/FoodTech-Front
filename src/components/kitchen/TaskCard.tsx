@@ -100,7 +100,6 @@ export function TaskCard({ task, onStartPreparation, isStarting = false }: TaskC
                 </span>
                 <p className="text-sm font-medium text-white-text">{product.name}</p>
               </div>
-              <span className="text-xs text-silver-text">x{product.quantity}</span>
             </div>
           ))}
         </div>
